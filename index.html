@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ollin kuvaportfolio</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #0b0b0d;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        /* Yläpalkki */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 20px 6%;
+            background: rgba(11, 11, 13, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 14px;
+            opacity: 0.8;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            opacity: 1;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 20px 80px;
+            background:
+                radial-gradient(circle at 50% 30%, #24242a 0%, #0b0b0d 55%);
+        }
+
+        .hero-content {
+            max-width: 900px;
+        }
+
+        .hero p.small {
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 25px;
+        }
+
+        .hero h1 {
+            font-size: clamp(50px, 9vw, 120px);
+            line-height: 0.95;
+            letter-spacing: -5px;
+            margin-bottom: 30px;
+        }
+
+        .hero h1 span {
+            color: #999;
+        }
+
+        .hero-description {
+            max-width: 600px;
+            margin: auto;
+            color: #aaa;
+            font-size: 17px;
+        }
+
+        .scroll {
+            margin-top: 60px;
+            color: #777;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        /* Portfolio */
+        .portfolio {
+            max-width: 1500px;
+            margin: auto;
+            padding: 100px 5%;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: clamp(35px, 5vw, 65px);
+            letter-spacing: -2px;
+        }
+
+        .section-title p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        /* Kuvagalleria */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            background: #161619;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .gallery-item.large {
+            grid-column: span 2;
+        }
+
+        .gallery-item img {
+            display: block;
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            transition: transform 0.6s ease, filter 0.6s ease;
+        }
+
+        .gallery-item.large img {
+            height: 650px;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.04);
+            filter: brightness(0.65);
+        }
+
+        .image-info {
+            position: absolute;
+            left: 25px;
+            bottom: 20px;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: 0.4s ease;
+        }
+
+        .gallery-item:hover .image-info {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .image-info h3 {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+
+        .image-info p {
+            font-size: 12px;
+            color: #ccc;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* About */
+        .about {
+            max-width: 1100px;
+            margin: auto;
+            padding: 120px 5%;
+            text-align: center;
+        }
+
+        .about h2 {
+            font-size: clamp(40px, 6vw, 75px);
+            letter-spacing: -3px;
+            margin-bottom: 30px;
+        }
+
+        .about p {
+            color: #999;
+            font-size: 18px;
+            max-width: 700px;
+            margin: auto;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid #222;
+            padding: 40px 5%;
+            text-align: center;
+            color: #666;
+            font-size: 13px;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 30px;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 95%;
+            max-height: 90vh;
+            object-fit: contain;
+        }
+
+        .close {
+            position: absolute;
+            top: 25px;
+            right: 35px;
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+            font-weight: 200;
+        }
+
+        /* Puhelin */
+        @media (max-width: 700px) {
+
+            header {
+                padding: 18px 5%;
+            }
+
+            nav a {
+                margin-left: 12px;
+                font-size: 12px;
+            }
+
+            .hero {
+                min-height: 80vh;
+            }
+
+            .hero h1 {
+                letter-spacing: -3px;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .gallery-item.large {
+                grid-column: span 1;
+            }
+
+            .gallery-item img,
+            .gallery-item.large img {
+                height: 400px;
+            }
+
+            .section-title {
+                display: block;
+            }
+
+            .section-title p {
+                margin-top: 10px;
+            }
+
+            .portfolio {
+                padding-top: 70px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Yläpalkki -->
+    <header>
+        <nav>
+            <div class="logo">OLLI</div>
+
+            <div>
+                <a href="#portfolio">Portfolio</a>
+                <a href="#about">Tietoa</a>
+            </div>
+        </nav>
+    </header>
+
+
+    <!-- Etusivu -->
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <p class="small">Photography Portfolio</p>
+
+            <h1>
+                Kuvia.<br>
+                <span>Hetkiä.</span>
+            </h1>
+
+            <p class="hero-description">
+                Tervetuloa kuvaportfoliooni.
+                Tähän kokoan valokuvia, hetkiä ja projekteja,
+                jotka haluan säilyttää ja jakaa.
+            </p>
+
+            <div class="scroll">
+                ↓ Selaa portfolioa
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Portfolio -->
+    <section class="portfolio" id="portfolio">
+
+        <div class="section-title">
+            <h2>Portfolio</h2>
+            <p>Valikoituja kuvia</p>
+        </div>
+
+
+        <div class="gallery">
+
+            <!-- KUVA 1 -->
+            <div class="gallery-item large" onclick="openImage('kuva1.jpg')">
+                <img src="kuva1.jpg" alt="Portfolio kuva 1">
+
+                <div class="image-info">
+                    <h3>Ensimmäinen kuva</h3>
+                    <p>Photography</p>
+                </div>
+            </div>
+
+
+            <!-- KUVA 2 -->
+            <div class="gallery-item" onclick="openImage('kuva2.jpg')">
+                <img src="kuva2.jpg" alt="Portfolio kuva 2">
+
+                <div class="image-info">
+                    <h3>Toinen kuva</h3>
+                    <p>Photography</p>
+                </div>
+            </div>
+
+
+            <!-- KUVA 3 -->
+            <div class="gallery-item" onclick="openImage('kuva3.jpg')">
+                <img src="kuva3.jpg" alt="Portfolio kuva 3">
+
+                <div class="image-info">
+                    <h3>Kolmas kuva</h3>
+                    <p>Photography</p>
+                </div>
+            </div>
+
+
+            <!-- KUVA 4 -->
+            <div class="gallery-item" onclick="openImage('kuva4.jpg')">
+                <img src="kuva4.jpg" alt="Portfolio kuva 4">
+
+                <div class="image-info">
+                    <h3>Neljäs kuva</h3>
+                    <p>Photography</p>
+                </div>
+            </div>
+
+
+            <!-- KUVA 5 -->
+            <div class="gallery-item" onclick="openImage('kuva5.jpg')">
+                <img src="kuva5.jpg" alt="Portfolio kuva 5">
+
+                <div class="image-info">
+                    <h3>Viides kuva</h3>
+                    <p>Photography</p>
+                </div>
+            </div>
+
+
+            <!-- KUVA 6 -->
+            <div class="gallery-item large" onclick="openImage('kuva6.jpg')">
+                <img src="kuva6.jpg" alt="Portfolio kuva 6">
+
+                <div class="image-info">
+                    <h3>Kuudes kuva</h3>
+                    <p>Photography</p>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Tietoa -->
+    <section class="about" id="about">
+
+        <h2>Minun kuvani.</h2>
+
+        <p>
+            Valokuvaus on tapa tallentaa hetkiä, paikkoja ja
+            tunnelmia. Tämä portfolio toimii kokoelmana
+            kuvista, joilla on minulle merkitystä.
+        </p>
+
+    </section>
+
+
+    <!-- Alatunniste -->
+    <footer>
+
+        © 2026 Olli — Photography Portfolio
+
+    </footer>
+
+
+    <!-- Suurennettu kuva -->
+    <div class="lightbox" id="lightbox" onclick="closeImage()">
+
+        <div class="close">&times;</div>
+
+        <img id="lightbox-image" src="" alt="Suuri kuva">
+
+    </div>
+
+
+    <script>
+
+        function openImage(image) {
+
+            document.getElementById("lightbox-image").src = image;
+
+            document.getElementById("lightbox").classList.add("active");
+
+        }
+
+
+        function closeImage() {
+
+            document.getElementById("lightbox").classList.remove("active");
+
+        }
+
+
+        document.addEventListener("keydown", function(event) {
+
+            if (event.key === "Escape") {
+
+                closeImage();
+
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>
